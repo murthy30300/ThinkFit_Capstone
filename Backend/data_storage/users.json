@@ -1,0 +1,12 @@
+{
+    "demo_user": {
+        "username": "demo_user",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$CwEAoHQuxfi/1/pfa43xvg$mBzvj6k4SBmi/w1xhAk00JtjwAxJRtkuHg+tacUEYpg",
+        "role": "user"
+    },
+    "admin": {
+        "username": "admin",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$gvCeEyLk3Ps/JwQAAKDUOg$zrYasOI6D8ElkVOnjMVgNkt4qcjN6dMsd8xSskDucE8",
+        "role": "admin"
+    }
+}

@@ -1,0 +1,37 @@
+[
+    {
+        "id": 1,
+        "text": "What is the time complexity of searching in a balanced Binary Search Tree?",
+        "options": ["O(n)", "O(log n)", "O(1)", "O(n log n)"],
+        "correct_index": 1,
+        "hint": "Think about how the search space is divided at each step."
+    },
+    {
+        "id": 2,
+        "text": "Which traversal visits the root node first?",
+        "options": ["Inorder", "Postorder", "Preorder", "Level Order"],
+        "correct_index": 2,
+        "hint": "Pre means before."
+    },
+    {
+        "id": 3,
+        "text": "In a binary tree, a node with no children is called a...",
+        "options": ["Root", "Leaf", "Branch", "Trunk"],
+        "correct_index": 1,
+        "hint": "Like on a real tree."
+    },
+    {
+        "id": 4,
+        "text": "What is the maximum number of nodes in a binary tree of height h?",
+        "options": ["2^h", "2^(h+1) - 1", "h^2", "2h"],
+        "correct_index": 1,
+        "hint": "Sum of powers of 2."
+    },
+    {
+        "id": 5,
+        "text": "Which data structure is commonly used to implement Level Order Traversal?",
+        "options": ["Stack", "Queue", "Heap", "Hash Map"],
+        "correct_index": 1,
+        "hint": "FIFO order is needed."
+    }
+]

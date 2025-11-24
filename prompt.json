@@ -1,0 +1,190 @@
+{
+  "scene": "A learner lands on the 'Quiz' page of a Streamlit app with a left sidebar nav (items: app, Quiz, Content, Admin). The page shows an intro and a 'Start Quiz' button. After finishing 5 questions, the learner picks what explanations they want (e.g., Examples, Code, Test Cases, Visuals, etc.). The app then shows only those selected content blocks for the learner's assigned level (Beginner/Intermediate/Advanced).",
+  "goals": [
+    "Assess user with a short quiz and assign a level",
+    "Let user choose content preferences AFTER the quiz",
+    "Render only selected content blocks for the assigned level",
+    "Keep navigation simple and predictable; minimal clicks"
+  ],
+  "constraints": {
+    "style": "Do not focus on CSS; keep layout basic. Dark theme acceptable.",
+    "runtime_ai": "No live AI calls; content comes from markdown files split by level and block tags",
+    "quiz_length": 5,
+    "auth": "demo login acceptable"
+  },
+  "navigation_model": {
+    "type": "sidebar",
+    "items": [
+      { "id": "app", "label": "app", "route": "/" },
+      { "id": "quiz", "label": "Quiz", "route": "/Quiz", "active": true },
+      { "id": "content", "label": "Content", "route": "/Content" },
+      { "id": "admin", "label": "Admin", "route": "/Admin", "role": "admin" }
+    ],
+    "rules": [
+      "After finishing quiz, auto-navigate to Preference step on Results page",
+      "From Results, a single primary action navigates to Content with filters applied",
+      "Sidebar remains visible at all times; current page highlighted"
+    ]
+  },
+  "pages": {
+    "Quiz": {
+      "header": "Assessment Quiz",
+      "copy": "This quiz will assess your knowledge and assign you a level (Beginner, Intermediate, Advanced).",
+      "cta": { "id": "start_quiz", "label": "Start Quiz" },
+      "flow": [
+        "Start → Q1 → Q2 → Q3 → Q4 → Q5 → Submit",
+        "Each question: radio options (A–D), per-question timer, confidence slider (1–5)"
+      ],
+      "progress_ui": { "show_stepper": true, "show_timer_per_question": true },
+      "actions": {
+        "next": "Go to next question (disabled until an option is selected)",
+        "back": "Allow back navigation within the 5 questions",
+        "submit": "Compute score + category; persist attempt"
+      },
+      "error_states": [
+        "Network error on fetch questions → Show retry",
+        "No option selected → Disable Next/Submit"
+      ]
+    },
+    "Results": {
+      "header": "Your Results",
+      "elements": [
+        "Category badge (Beginner/Intermediate/Advanced)",
+        "Score breakdown (accuracy, time, confidence)",
+        "Preference picker (chips/toggles)"
+      ],
+      "preference_picker": {
+        "type": "multiselect",
+        "options": [
+          "examples",
+          "practice_problems",
+          "step_by_step",
+          "visuals",
+          "code_python",
+          "code_java",
+          "code_cpp",
+          "test_cases",
+          "complexity",
+          "summary",
+          "interactive",
+          "analogies",
+          "pitfalls",
+          "challenge",
+          "gif_walkthrough",
+          "post_read_quiz"
+        ],
+        "min_select": 1,
+        "remember_choice": true
+      },
+      "primary_action": {
+        "id": "generate_learning_view",
+        "label": "Generate My Learning View",
+        "navigate_to": "/Content",
+        "pass_state": ["topic", "category", "selected_preferences"]
+      }
+    },
+    "Content": {
+      "header": "Personalized Content",
+      "layout": "two_pane",
+      "left_pane": {
+        "component": "PreferencesSidebar",
+        "controls": { "type": "multiselect", "live_update": true }
+      },
+      "right_pane": {
+        "component": "ContentRenderer",
+        "data_source": "markdown_by_topic_and_level",
+        "filter_logic": "Render only blocks that match selected preferences"
+      },
+      "block_mapping": {
+        "examples": ["<!-- examples:start -->", "<!-- examples:end -->"],
+        "practice_problems": ["<!-- practice:start -->", "<!-- practice:end -->"],
+        "step_by_step": ["<!-- steps:start -->", "<!-- steps:end -->"],
+        "visuals": ["<!-- visuals:start -->", "<!-- visuals:end -->"],
+        "code_python": ["```python", "```"],
+        "code_java": ["```java", "```"],
+        "code_cpp": ["```cpp", "```"],
+        "test_cases": ["<!-- testcases:start -->", "<!-- testcases:end -->"],
+        "complexity": ["<!-- complexity:start -->", "<!-- complexity:end -->"],
+        "summary": ["<!-- summary:start -->", "<!-- summary:end -->"],
+        "interactive": ["<!-- interactive:start -->", "<!-- interactive:end -->"],
+        "analogies": ["<!-- analogies:start -->", "<!-- analogies:end -->"],
+        "pitfalls": ["<!-- pitfalls:start -->", "<!-- pitfalls:end -->"],
+        "challenge": ["<!-- challenge:start -->", "<!-- challenge:end -->"],
+        "gif_walkthrough": ["<!-- gif:start -->", "<!-- gif:end -->"],
+        "post_read_quiz": ["<!-- postquiz:start -->", "<!-- postquiz:end -->"]
+      },
+      "empty_states": [
+        "If a chosen block is missing in markdown, show a small inline note: 'No content for this selection yet.'"
+      ],
+      "quick_actions": [
+        "Change topic (dropdown)",
+        "Toggle level preview (admin only): Beginner/Intermediate/Advanced"
+      ]
+    },
+    "Admin": {
+      "header": "Admin Panel",
+      "capabilities": [
+        "Upload markdown with YAML frontmatter (topic, version, levels)",
+        "Preview as each level",
+        "Set draft/live"
+      ]
+    }
+  },
+  "data_models": {
+    "attempt": {
+      "user_id": "string",
+      "topic": "string",
+      "answers": [{ "q_id": "number", "selected": "string", "time": "number", "confidence": "number" }],
+      "score": "number (0..1)",
+      "category": "Beginner|Intermediate|Advanced",
+      "created_at": "iso-datetime"
+    },
+    "content_request": {
+      "topic": "string",
+      "level": "Beginner|Intermediate|Advanced",
+      "preferences": ["examples", "code_python", "test_cases", "..."]
+    }
+  },
+  "api_contracts": {
+    "GET /api/questions": {
+      "query": { "topic": "string" },
+      "response": { "questions": [{ "id": "number", "text": "string", "options": ["A","B","C","D"] }] }
+    },
+    "POST /api/submit": {
+      "body": { "attempt": "<attempt>" },
+      "response": { "score": "number", "category": "string", "breakdown": { "accuracy": "number", "time": "number", "confidence": "number" } }
+    },
+    "GET /api/content": {
+      "query": "<content_request>",
+      "response": {
+        "topic": "string",
+        "level": "string",
+        "blocks": [
+          { "type": "examples", "title": "string", "body_md": "markdown" },
+          { "type": "code_python", "title": "string", "body_md": "markdown" }
+        ]
+      }
+    }
+  },
+  "state_management": {
+    "client": {
+      "session": ["user", "attempt_id", "category", "topic", "selected_preferences"],
+      "restore_on_reload": true
+    },
+    "routing_rules": [
+      "If no category yet, redirect /Content → /Quiz",
+      "After submit, go to Results with pre-filled category and preference picker"
+    ]
+  },
+  "acceptance_criteria": [
+    "User can start quiz, answer 5 questions, submit, and see a category",
+    "User can select preferences and generate a filtered content view",
+    "Changing preferences updates content live without losing category",
+    "Direct navigation to Content without a category redirects to Quiz",
+    "Admin can upload a markdown and see it appear in Content for the chosen topic"
+  ],
+  "accessibility": {
+    "keyboard": "Tab/Shift+Tab to move between options; Enter to select",
+    "aria": "Headings for sections; labels for controls"
+  }
+}

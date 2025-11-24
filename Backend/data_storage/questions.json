@@ -1,0 +1,54 @@
+{
+    "Binary Trees": [
+        {
+            "id": 1,
+            "text": "What is the maximum number of nodes at level 'l' in a binary tree?",
+            "options": [
+                "2^l",
+                "2^(l-1)",
+                "2^(l+1)",
+                "2l"
+            ]
+        },
+        {
+            "id": 2,
+            "text": "What is the time complexity of searching in a BST (average case)?",
+            "options": [
+                "O(n)",
+                "O(log n)",
+                "O(n log n)",
+                "O(1)"
+            ]
+        },
+        {
+            "id": 3,
+            "text": "Which traversal visits the root first?",
+            "options": [
+                "Inorder",
+                "Preorder",
+                "Postorder",
+                "Level Order"
+            ]
+        },
+        {
+            "id": 4,
+            "text": "A binary tree with n nodes has how many edges?",
+            "options": [
+                "n",
+                "n-1",
+                "n+1",
+                "2n"
+            ]
+        },
+        {
+            "id": 5,
+            "text": "In a full binary tree, every node has how many children?",
+            "options": [
+                "0 or 2",
+                "1 or 2",
+                "0 or 1",
+                "Exactly 2"
+            ]
+        }
+    ]
+}
