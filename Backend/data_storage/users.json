@@ -8,5 +8,10 @@
         "username": "admin",
         "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$gvCeEyLk3Ps/JwQAAKDUOg$zrYasOI6D8ElkVOnjMVgNkt4qcjN6dMsd8xSskDucE8",
         "role": "admin"
+    },
+    "vishnu1702": {
+        "username": "vishnu1702",
+        "role": "user",
+        "hashed_password": "$argon2id$v=19$m=65536,t=3,p=4$VWqNUar1fq+1tra2FkJojQ$nJsv5aJz9XttE/TbIXFPCqzfFw45uCfRQZo8oKrm+eo"
     }
 }
