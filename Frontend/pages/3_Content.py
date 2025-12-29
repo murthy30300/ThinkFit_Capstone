@@ -1,9 +1,12 @@
 import streamlit as st
 import requests
+from utils import init_api_session
 
 API_URL = "http://127.0.0.1:8000/api"
 
 st.set_page_config(page_title="Content", page_icon="📚", layout="wide")
+
+init_api_session()
 
 if "category" not in st.session_state or st.session_state.category is None:
     st.warning("Please take the quiz first to get personalized content.")

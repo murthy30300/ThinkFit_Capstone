@@ -1,5 +1,6 @@
 import streamlit as st
 import requests
+from utils import init_api_session
 
 st.set_page_config(
     page_title="Learning App",
@@ -9,8 +10,7 @@ st.set_page_config(
 )
 
 # Initialize Session for Cookies
-if "api_session" not in st.session_state:
-    st.session_state.api_session = requests.Session()
+init_api_session()
 
 API_URL = "http://127.0.0.1:8000/api"
 

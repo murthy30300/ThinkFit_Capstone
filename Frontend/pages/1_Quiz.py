@@ -1,8 +1,11 @@
 import streamlit as st
 import requests
 import time
+from utils import init_api_session
 
 API_URL = "http://127.0.0.1:8000/api"
+
+init_api_session()
 
 st.set_page_config(page_title="Quiz", page_icon="📝")
 

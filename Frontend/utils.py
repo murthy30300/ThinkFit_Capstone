@@ -81,3 +81,7 @@ def init_session():
             st.query_params["level"] = st.session_state.user_level
         if st.session_state.user_email:
             st.query_params["email"] = st.session_state.user_email
+
+def init_api_session():
+    if "api_session" not in st.session_state:
+        st.session_state.api_session = requests.Session()
